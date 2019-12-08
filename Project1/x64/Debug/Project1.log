@@ -1,0 +1,12 @@
+﻿  main.cpp
+d:\vs repo\learnopengl\project1\vertices.h(83): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+d:\vs repo\learnopengl\project1\vertices.h(84): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+          with
+          [
+              T=float
+          ]
+  Project1.vcxproj -> D:\vs repo\learnOpenGL\x64\Debug\Project1.exe

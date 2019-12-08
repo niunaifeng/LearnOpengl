@@ -1,0 +1,15 @@
+struct attrib_t {
+  std::vector<real_t> vertices;  // 'v'(xyz)
+
+  // For backward compatibility, we store vertex weight in separate array.
+  std::vector<real_t> vertex_weights;  // 'v'(w)
+  std::vector<real_t> normals;         // 'vn'
+  std::vector<real_t> texcoords;       // 'vt'(uv)
+
+  // For backward compatibility, we store texture coordinate 'w' in separate
+  // array.
+  std::vector<real_t> texcoord_ws;  // 'vt'(w)
+  std::vector<real_t> colors;       // extension: vertex colors
+
+
+  包含所有顶点坐标 ，w，法向量，纹理坐标，全部以浮点数存储，需要自行划分为3个或2个一组做为坐标，并且，不存储重复的值
