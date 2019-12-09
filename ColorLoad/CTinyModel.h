@@ -94,9 +94,9 @@ public:
 	}
 	CTinyModel(std::string vPath)
 	{
-		loadModel(vPath);
-		std::cout << m_Meshes[0].getVertices().size() << std::endl;		
+		loadModel(vPath);			
 	}
+	CTinyModel() {};
 	void loadModel(std::string vPath)
 	{
 		m_Directory = vPath.substr(0, vPath.find_last_of('/'));
@@ -167,7 +167,7 @@ public:
 	void matchPointInMesh(SVertex& vVertex, CMesh vMesh)
 	{
 		for (int i = 0; i < vMesh.getVertices().size(); i++)
-			vVertex.findColor(vMesh.getVertices()[i]);
+			vVertex.findVertex(vMesh.getVertices()[i]);
 	}
 
 	void calColor()
@@ -224,6 +224,7 @@ private:
 	std::vector<STexture> m_TextureLoaded;
 	std::vector<SMaterial> m_Materials;	
 	std::string m_Directory;
+	SBox m_Box;
 	void __processModel(tinyobj::attrib_t vAttrib, std::vector<tinyobj::shape_t> vShapes, std::vector<tinyobj::material_t> vMaterials)
 	{
 		for (int i = 0; i < vMaterials.size(); i++)
@@ -244,7 +245,8 @@ private:
 		__loadTextures();		
 		for (int i = 0; i < vShapes.size(); i++)
 		{
-			__processMesh(vAttrib, vShapes[i]);			
+			__processMesh(vAttrib, vShapes[i]);
+			m_Meshes[i].setMeshID(i);			
 		}
 	}
 	void __processMesh(tinyobj::attrib_t vAttrib, tinyobj::shape_t vShape)
@@ -293,11 +295,13 @@ private:
 			Indices.push_back(i);
 			 
 		}
-		Textures = __loadMaterial(vShape);
-		CMesh Mesh(Vertices, Indices, Textures);
+		std::string MaterialName = "";
+		Textures = __loadMaterial(vShape, MaterialName);
+		
+		CMesh Mesh(Vertices, Indices, Textures, vShape.name, MaterialName);		
 		m_Meshes.push_back(Mesh);
 	}
-	std::vector<STexture> __loadMaterial(tinyobj::shape_t vShape)
+	std::vector<STexture> __loadMaterial(tinyobj::shape_t vShape,std::string& vMaterialName)
 	{
 		int ID = vShape.mesh.material_ids[0];	
 		std::vector<STexture> Textures;
@@ -309,6 +313,7 @@ private:
 		Textures.push_back(DiffTex);
 		Textures.push_back(SpecTex);
 		Textures.push_back(BumpTex);
+		vMaterialName = m_Materials[ID].Name;
 		return Textures;
 	}
 	void __loadTextures()
@@ -363,7 +368,37 @@ private:
 		}
 		
 	}
-	
+	void __setBox()
+	{
+		float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
+		MaxX = m_Meshes[0].getBox().MaxX;
+		MinX = m_Meshes[0].getBox().MinX;
+		MaxY = m_Meshes[0].getBox().MaxY;
+		MinY = m_Meshes[0].getBox().MinY;
+		MaxZ = m_Meshes[0].getBox().MaxZ;
+		MinZ = m_Meshes[0].getBox().MinZ;
+		for (int i = 1; i < m_Meshes.size(); i++)
+		{
+			if (MaxX < m_Meshes[i].getBox().MaxX)
+				MaxX = m_Meshes[i].getBox().MaxX;
+			if (MinX > m_Meshes[i].getBox().MinX)
+				MinX = m_Meshes[i].getBox().MinX;
+			if (MaxY < m_Meshes[i].getBox().MaxY)
+				MaxY = m_Meshes[i].getBox().MaxY;
+			if (MinY > m_Meshes[i].getBox().MinY)
+				MinY = m_Meshes[i].getBox().MinY;
+			if (MaxZ < m_Meshes[i].getBox().MaxZ)
+				MaxZ = m_Meshes[i].getBox().MaxZ;
+			if (MinZ > m_Meshes[i].getBox().MinZ)
+				MinZ = m_Meshes[i].getBox().MinZ;
+		}
+		m_Box.MaxX = MaxX * m_Box.MAGNIFICATION;
+		m_Box.MinX = MinX > 0 ? (MinX / m_Box.MAGNIFICATION) : (MinX * m_Box.MAGNIFICATION);
+		m_Box.MaxY = MaxY * m_Box.MAGNIFICATION;
+		m_Box.MinY = MinY > 0 ? (MinY / m_Box.MAGNIFICATION) : (MinY * m_Box.MAGNIFICATION);
+		m_Box.MaxZ = MaxZ * m_Box.MAGNIFICATION;
+		m_Box.MinZ = MinZ > 0 ? (MinZ / m_Box.MAGNIFICATION) : (MinZ * m_Box.MAGNIFICATION);
+	}
 };
 
 void loadexample(std::string vInput)

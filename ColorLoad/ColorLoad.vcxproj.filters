@@ -33,6 +33,9 @@
     <ClCompile Include="loader_example.cc">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="COctree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -50,10 +53,13 @@
     <ClInclude Include="CTinyModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="KNN.h">
+    <ClInclude Include="CHandledModel.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="CHandledModel.h">
+    <ClInclude Include="CBuildobj.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="COctree.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -122,16 +122,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\glad\src\glad.c" />
+    <ClCompile Include="COctree.cpp" />
     <ClCompile Include="loader_example.cc" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stb.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="CBuildobj.h" />
     <ClInclude Include="CHandledModel.h" />
     <ClInclude Include="CModel.h" />
+    <ClInclude Include="COctree.h" />
     <ClInclude Include="CTinyModel.h" />
-    <ClInclude Include="KNN.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="CMesh.h" />
   </ItemGroup>

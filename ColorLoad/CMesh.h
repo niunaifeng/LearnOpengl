@@ -14,6 +14,17 @@ struct SBox
 	float MinY;
 	float MaxZ;
 	float MinZ;
+	float MAGNIFICATION = 1.05f;
+	SBox() {};
+	SBox(float vMaxX, float vMinX, float vMaxY, float vMinY, float vMaxZ, float vMinZ)
+	{
+		MaxX = vMaxX;
+		MinX = vMinX;
+		MaxY = vMaxY;
+		MinY = vMinY;
+		MaxZ = vMaxZ;
+		MinZ = vMinZ;
+	}
 };
 struct SVertex
 {
@@ -27,6 +38,7 @@ struct SVertex
 	glm::vec3 NormColor;
 	glm::vec3 HeigColor;
 	std::vector<SVertex> NN;
+	int MeshID;
 	
 	float MinDistance = 100.0f;
 	SVertex() {};
@@ -41,7 +53,7 @@ struct SVertex
 		return sqrt(pow((Position.x - vVertex.Position.x), 2) + pow((Position.y - vVertex.Position.y), 2)
 			+ pow((Position.z - vVertex.Position.z), 2));
 	}
-	void findColor(SVertex vVertex)
+	void findVertex(SVertex vVertex)
 	{
 		float Distance = calDistance(vVertex);
 		if (abs(Distance - MinDistance) < 0.01f)
@@ -60,18 +72,16 @@ struct SVertex
 		DiffColor = glm::vec3(0, 0, 0);
 		for (int i = 0; i < NN.size(); i++)
 		{
-			DiffColor += NN[i].DiffColor;
-			/*std::cout << DiffColor.x << std::endl;
-			std::cout << NN[i].DiffColor.x << std::endl;
-			std::cout << std::endl;*/
+			DiffColor += NN[i].DiffColor;			
 		}
 		DiffColor.x /= NN.size();
 		DiffColor.y /= NN.size();
-		DiffColor.z /= NN.size();
-		//std::cout << DiffColor.x << std::endl;
-		//DiffColor = NN[1].DiffColor;
+		DiffColor.z /= NN.size();	
 	}
-	
+	void resetMeshID()
+	{
+
+	}
 };
 struct STexture
 {
@@ -96,15 +106,16 @@ struct SMaterial
 class CMesh
 {
 public:
-	std::vector<SVertex> m_Vertices;
-	CMesh(std::vector<SVertex> vVertices, std::vector<unsigned int> vIndices, std::vector<STexture> vTexture) 
+	CMesh(std::vector<SVertex> vVertices, std::vector<unsigned int> vIndices, std::vector<STexture> vTexture,std::string vName, std::string vMaterialName) 
 	{
 		
 		m_Vertices = vVertices;
 		m_Texture = vTexture;
 		m_Indices = vIndices;				
-		
-		setMesh();		
+		m_Name = vName;
+		m_MaterialName = vMaterialName;
+		setMesh();	
+		__setBox();
 	}
 	CMesh() {};
 	
@@ -245,7 +256,7 @@ public:
 				for (int m = 0; m < vMesh[k].getVertices().size(); m++)
 				{
 					//if (m_Vertices[i].isInBox(vMesh[k].getBox()))
-					m_Vertices[i].findColor(vMesh[k].getVertices()[m]);
+					m_Vertices[i].findVertex(vMesh[k].getVertices()[m]);
 					
 				}
 			}
@@ -253,53 +264,19 @@ public:
 		}
 			
 	}
-	/*void findColor(SVertex& vVertex)
+	void setMeshID(int ID)
 	{
-		vVertex.DiffColor = glm::vec3(0, 0, 0);
-		if (vVertex.isInBox(m_Box))		
+		for (int i = 0; i < m_Vertices.size(); i++)
 		{
-			
-			for (int i = 0; i < m_Vertices.size(); i++)
-			{
-				
-				float Distance = m_Vertices[i].calDistance(vVertex);
-				if (Distance < vVertex.MinDistance)
-				{
-					vVertex.MinDistance = Distance;
-					vVertex.DiffColor.x = m_Vertices[i].DiffColor.x;
-					vVertex.DiffColor.y = m_Vertices[i].DiffColor.y;
-					vVertex.DiffColor.z = m_Vertices[i].DiffColor.z;
-					
-				}
-			}			
+			m_Vertices[i].MeshID = ID;
 		}
-	}*/
+	}
 	bool isInBox(SVertex vVertex)
 	{
 		return (vVertex.Position.x > m_Box.MinX) && (vVertex.Position.x < m_Box.MaxX) && (vVertex.Position.y > m_Box.MinY) && (vVertex.Position.y < m_Box.MaxY)
 			&& (vVertex.Position.z > m_Box.MinZ) && (vVertex.Position.z < m_Box.MaxZ);
 	}
-	//void findColor(CMesh vMesh)
-	//{
-	//	for (int i = 0; i < m_Vertices.size()&&i<150; i++)
-	//	{
-	//		//if (m_Vertices[i].isInBox(vMesh.getBox()))
-	//		{
-	//		std::cout << i << " point start" << std::endl;
-	//			for (int k = 0; k < vMesh.getVertices().size(); k++)
-	//			{
-	//				std::cout << "process " << k << std::endl;
-	//				float Distance = m_Vertices[i].calDistance(vMesh.getVertices()[k]);
-	//				if (Distance < m_Vertices[i].MinDistance)
-	//				{
-	//					m_Vertices[i].MinDistance = Distance;
-	//					m_Vertices[i].DiffColor = vMesh.getVertices()[k].DiffColor;
-	//				}
-	//			}
-	//		std::cout << i << " point end" << std::endl;
-	//		}
-	//	}
-	//}
+	
 	void changeVertex(SVertex vVertex)
 	{
 		vVertex.DiffColor = glm::vec3(0, 0, 0);
@@ -312,10 +289,20 @@ public:
 	{
 		return m_Vertices;
 	}
+	const std::string getName()
+	{
+		return m_Name;
+	}
+	const std::string getMaterialName()
+	{
+		return m_MaterialName;
+	}
 	void showDetail()
 	{
 		std::cout << "Vertices :" << m_Vertices.size() << std::endl;
 		std::cout << "Indices :" << m_Indices.size() << std::endl;
+		std::cout << "name :" << m_Name << std::endl;
+		std::cout << "material :" << m_MaterialName << std::endl;
 		/*for (int i = 0; i < m_Indices.size(); i++)
 		{
 			std::cout << m_Indices[i] << std::endl;
@@ -331,7 +318,7 @@ public:
 
 		for (int i = 0; i < m_Vertices.size(); i++)
 		{
-			std::cout << "Diffues :" << m_Vertices[i].Position.x << "," << m_Vertices[i].Position.y << "," << m_Vertices[i].Position.z << std::endl;
+		//	std::cout << "Diffues :" << m_Vertices[i].Position.x << "," << m_Vertices[i].Position.y << "," << m_Vertices[i].Position.z << std::endl;
 		//	std::cout << "vertex " << i << std::endl;
 		//	/*std::cout << "Position " << m_Vertices[i].Position << std::endl;
 		//	std::cout << "TexCoords " << m_Vertices[i].TexCoords << std::endl;
@@ -339,11 +326,12 @@ public:
 		//	std::cout << "Normal Color " << m_Vertices[i].NormColor << std::endl;*/
 		//	std::cout << "Position:" << m_Vertices[i].Position.x << "," << m_Vertices[i].Position.y << "," << m_Vertices[i].Position.z << std::endl;
 		//	std::cout << "Texcoords:" << m_Vertices[i].TexCoords.x << "," << m_Vertices[i].TexCoords.y << std::endl;
-			std::cout << "Diffues :" << m_Vertices[i].DiffColor.x << "," << m_Vertices[i].DiffColor.y << "," << m_Vertices[i].DiffColor.z << std::endl;
+		//	std::cout << "Diffues :" << m_Vertices[i].DiffColor.x << "," << m_Vertices[i].DiffColor.y << "," << m_Vertices[i].DiffColor.z << std::endl;
 		//	std::cout << "Specular :" << m_Vertices[i].SpecColor.x << "," << m_Vertices[i].SpecColor.y << "," << m_Vertices[i].SpecColor.z << std::endl;
 		//	std::cout << "Normal :" << m_Vertices[i].NormColor.x << "," << m_Vertices[i].NormColor.y << "," << m_Vertices[i].NormColor.z << std::endl;
 		//	std::cout << "Height :" << m_Vertices[i].HeigColor.x << "," << m_Vertices[i].HeigColor.y << "," << m_Vertices[i].HeigColor.z << std::endl;
-		//	std::cout << "---------------";
+		//	std::cout << "---------------"<<std::endl;
+			
 		}
 	}
 	void showTexture()
@@ -371,10 +359,12 @@ public:
 		std::cout << "Y " << m_Box.MinY << "--" << m_Box.MaxY << std::endl;
 		std::cout << "Z " << m_Box.MinZ << "--" << m_Box.MaxZ << std::endl;
 	}
-private:
-		
+private:	
+	std::vector<SVertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
 	std::vector<STexture> m_Texture;
+	std::string m_Name;
+	std::string m_MaterialName;
 	SBox m_Box;
 	unsigned int VAO;
 	unsigned int VBO;
@@ -400,13 +390,7 @@ private:
 				MaxZ = m_Vertices[i].Position.z;
 			if (m_Vertices[i].Position.z < MinZ)
 				MinZ = m_Vertices[i].Position.z;
-		}
-		m_Box.MaxX = MaxX * 1.05f;
-		m_Box.MinX = MinX * 1.05f;
-		m_Box.MaxY = MaxY * 1.05f;
-		m_Box.MinY = MinY * 1.05f;
-		m_Box.MaxZ = MaxZ * 1.05f;
-		m_Box.MinZ = MinZ * 1.05f;
+		}		
 	}
 	
 	

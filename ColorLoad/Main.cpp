@@ -7,7 +7,8 @@
 #include "Camera.h"
 #include "CTinyModel.h"
 #include "CHandledModel.h"
-
+#include "CBuildobj.h"
+#include "COctree.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -71,15 +72,16 @@ int main()
 	Shader OurShaderC("./Shader/ModelCVertexShader.vert", "./Shader/ModelCFragmentShader.frag");
 	Shader OurShaderT("./Shader/ModelTVertexShader.vert", "./Shader/ModelTFragmentShader.frag");
 	//CTinyModel MyModel("./Model2/CornellBox-Empty-RG.obj");
-	CTinyModel MyModel("./Model/nanosuit.obj");
-	MyModel.changeTexToColor();	
+	//CTinyModel MyModel("./Model/nanosuit.obj");
+	//MyModel.changeTexToColor();	
 	//MyModel.showMesh();
-	
+	//CBuildobj ReModel(MyModel);
 	//CTinyModel RebuiltModel("./Model2/Remeshed-CornellBox-Empty-RG-404.obj");
-	CTinyModel RebuiltModel("./Model/nanosuit-1.96k.obj");
-	
+	//CTinyModel RebuiltModel("./Model/nanosuit-1.96k.obj");
+	//CTinyModel MyModel("./Model/rewrittenobj2.obj");
+	//CBuildobj ReObj(RebuiltModel);
 	//callMulitThread(&RebuiltModel, MyModel, 0, 500);
-	clock_t Start = clock();
+	/*clock_t Start = clock();
 	std::thread First(callMulitThread, &RebuiltModel, MyModel, 0, 7958);
 	std::thread Second(callMulitThread, &RebuiltModel, MyModel, 7958, 15917);
 	std::thread Third(callMulitThread, &RebuiltModel, MyModel, 15917, 23876);
@@ -94,13 +96,15 @@ int main()
 	Fifth.join();
 	Sixth.join();
 	clock_t End = clock();
-	std::cout << "time used " << End - Start << std::endl;
+	std::cout << "time used " << End - Start << std::endl;*/
 
 	
-	RebuiltModel.calColor();
-	RebuiltModel.setMeshes();
-	
-	
+	//RebuiltModel.calColor();
+	//RebuiltModel.setMeshes();
+	SBox MyBox(10, 0, 12, 2, 20, 10);
+	std::vector<SVertex> Vertices;
+	COctree MyTree(Vertices, MyBox, 4);
+	MyTree.show();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -131,13 +135,13 @@ int main()
 		OurShaderC.setMat4("model", model);
 		//OurModel.drawInColor(OurShaderC);
 		//MyModel.drawInColor(OurShaderC);
-		RebuiltModel.drawInColor(OurShaderC);
-		OurShaderT.use();
+		//RebuiltModel.drawInColor(OurShaderC);
+		//OurShaderT.use();
 		OurShaderT.setMat4("projection", projection);
 		OurShaderT.setMat4("view", view);
 		OurShaderT.setMat4("model", model);
 		//OurModel.drawInTex(OurShaderT);
-		MyModel.drawInTex(OurShaderT);
+		//MyModel.drawInTex(OurShaderT);
 
 		
 

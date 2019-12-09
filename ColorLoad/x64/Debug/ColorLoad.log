@@ -1,25 +1,26 @@
 ﻿  Main.cpp
-d:\vs repo\learnopengl\colorload\cmesh.h(311): warning C4227: 使用了记时错误: 忽略引用上的限定符
-d:\vs repo\learnopengl\colorload\cmesh.h(114): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
-d:\vs repo\learnopengl\colorload\cmesh.h(149): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
-d:\vs repo\learnopengl\colorload\cmesh.h(171): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\cmesh.h(288): warning C4227: 使用了记时错误: 忽略引用上的限定符
+d:\vsrepo\learnopengl\colorload\cmesh.h(125): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\cmesh.h(160): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\cmesh.h(182): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-d:\vs repo\learnopengl\colorload\cmesh.h(172): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\cmesh.h(183): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-d:\vs repo\learnopengl\colorload\cmodel.h(265): warning C4018: “<”: 有符号/无符号不匹配
-d:\vs repo\learnopengl\colorload\ctinymodel.h(59): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(107): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(187): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(188): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(192): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(193): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(195): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(196): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\colorload\main.cpp(205): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  ColorLoad.vcxproj -> D:\vs repo\learnOpenGL\x64\Debug\ColorLoad.exe
+d:\vsrepo\learnopengl\colorload\cmodel.h(265): warning C4018: “<”: 有符号/无符号不匹配
+d:\vsrepo\learnopengl\colorload\ctinymodel.h(59): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\cbuildobj.h(45): warning C4267: “+=”: 从“size_t”转换到“int”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(111): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(191): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(192): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(196): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(197): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(199): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(200): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+d:\vsrepo\learnopengl\colorload\main.cpp(209): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+  ColorLoad.vcxproj -> D:\vsrepo\learnOpenGL\x64\Debug\ColorLoad.exe
