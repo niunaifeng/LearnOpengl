@@ -1,12 +1,1 @@
-﻿  Main.cpp
-d:\vs repo\learnopengl\learnopengl\mesh.h(85): warning C4267: “参数”: 从“size_t”转换到“GLsizei”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\model.h(291): warning C4102: “std”: 未引用的标签
-d:\vs repo\learnopengl\learnopengl\main.cpp(104): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(179): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(180): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(184): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(185): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(187): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(188): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-d:\vs repo\learnopengl\learnopengl\main.cpp(197): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
-  learnOpenGL.vcxproj -> D:\vs repo\learnOpenGL\x64\Debug\learnOpenGL.exe
+﻿  learnOpenGL.vcxproj -> D:\vsrepo\learnOpenGL\x64\Debug\learnOpenGL.exe

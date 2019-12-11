@@ -133,11 +133,14 @@
     <ClInclude Include="CHandledModel.h" />
     <ClInclude Include="CModel.h" />
     <ClInclude Include="COctree.h" />
+    <ClInclude Include="CRebuiltModel.h" />
+    <ClInclude Include="CStruct.h" />
     <ClInclude Include="CTinyModel.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="CMesh.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="Shader\ColorFragmentShader.frag" />
     <None Include="Shader\ColorVertexShader.vert" />

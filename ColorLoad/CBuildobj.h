@@ -15,7 +15,7 @@ private:
 	int m_VerticesNum = 0;
 	void buildModel(CTinyModel vModel)
 	{
-		Model.open("rewrittenobj.txt");
+		Model.open("texcoordobj.txt");
 		Model << "# this is a rewritten model" << std::endl;
 		Model << "# to test txt transfer to obj" << std::endl;
 		Model << "mtllib nanosuit.mtl" << std::endl;

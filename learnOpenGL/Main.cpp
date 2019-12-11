@@ -79,7 +79,7 @@ int main()
 
 	// load models
 	// -----------
-	Model ourModel("./Model/nanosuit.obj");
+	Model ourModel("./Model/texcoordobj.obj");
 	/*int cout = 0;
 	for (int i = 0; i < ourModel.meshes.size(); i++)
 	{

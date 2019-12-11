@@ -62,6 +62,12 @@
     <ClInclude Include="COctree.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CStruct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="CRebuiltModel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shader\ColorFragmentShader.frag">
@@ -89,6 +95,7 @@
     <None Include="Shader\ModelTVertexShader.vert">
       <Filter>Shader</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TIPS\TinyObjLoader.txt">

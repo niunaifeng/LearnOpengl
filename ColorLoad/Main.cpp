@@ -1,14 +1,14 @@
 #include<glad/glad.h>
 #include<iostream>
 #include<GLFW/glfw3.h>
-#include<thread>
 #include<ctime>
 #include "CModel.h"
 #include "Camera.h"
 #include "CTinyModel.h"
 #include "CHandledModel.h"
 #include "CBuildobj.h"
-#include "COctree.h"
+#include "CRebuiltModel.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -80,25 +80,7 @@ int main()
 	CTinyModel RebuiltModel("./Model/nanosuit-1.96k.obj");
 	//CTinyModel MyModel("./Model/rewrittenobj2.obj");
 	//CBuildobj ReObj(RebuiltModel);
-	//callMulitThread(&RebuiltModel, MyModel, 0, 500);
-	/*clock_t Start = clock();
-	std::thread First(callMulitThread, &RebuiltModel, MyModel, 0, 7958);
-	std::thread Second(callMulitThread, &RebuiltModel, MyModel, 7958, 15917);
-	std::thread Third(callMulitThread, &RebuiltModel, MyModel, 15917, 23876);
-	std::thread Forth(callMulitThread, &RebuiltModel, MyModel, 23876, 31835);
-	std::thread Fifth(callMulitThread, &RebuiltModel, MyModel, 31835, 39794);
-	std::thread Sixth(callMulitThread, &RebuiltModel, MyModel, 39794, 47753);
-	
-	First.join();
-	Second.join();
-	Third.join();
-	Forth.join();
-	Fifth.join();
-	Sixth.join();
-	clock_t End = clock();
-	std::cout << "time used " << End - Start << std::endl;*/
 
-	
 	//RebuiltModel.calColor();
 	//RebuiltModel.setMeshes();
 	CHandleModel HandleModel(MyModel);
@@ -127,10 +109,23 @@ int main()
 	for (int i = 0; i < MyVertices.size(); i++)
 	{
 		MyTree.doMatch(MyVertices[i]);
+		MyVertices[i]->resetMeshID();
+	}
+	for (int i = 0; i < MyVertices.size() / 3; i++)
+	{
+		if (MyVertices[3 * i]->MeshID != MyVertices[3 * i + 1]->MeshID || MyVertices[3 * i]->MeshID != MyVertices[3 * i + 2]->MeshID)
+		{
+			MyVertices[3 * i + 1]->MeshID = MyVertices[3 * i]->MeshID;
+			MyVertices[3 * i + 2]->MeshID = MyVertices[3 * i]->MeshID;
+		}
+	}
+	for (int i = 0; i < MyVertices.size(); i++)
+	{
+		MyVertices[i]->calTexCoords();
 	}
 	End = clock();
-	std::cout << "30 vertex use " << End - Start << std::endl;
-	
+	std::cout << "match vertices use " << End - Start << std::endl;	
+
 	RebuiltModel.calColor();
 	RebuiltModel.setMeshes();
 	int Count = 0;
@@ -143,8 +138,14 @@ int main()
 		}
 	}
 	std::cout << Count << " miss" << std::endl;
-	//MyTree.show();
+	
+	CHandleModel MatchedModel(RebuiltModel);
+	std::vector<SVertex> MatchedVertices = MatchedModel.getVertices();
 
+	CRebuiltModel TarModel(MyModel, MatchedVertices);
+	TarModel.getModel().showMesh();
+	CBuildobj Build(TarModel.getModel());
+	
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();

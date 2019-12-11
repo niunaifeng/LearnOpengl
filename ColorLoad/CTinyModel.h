@@ -1,11 +1,8 @@
 #pragma once
 #define TINYOBJLOADER_IMPLEMENTATION
 #include<tiny_obj_loader.h>
-#include<vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include<thread>
-#include"CMesh.h"
+#include"COctree.h"
 class CTinyModel
 {
 public:	
@@ -97,6 +94,16 @@ public:
 		__setBox();			
 	}
 	CTinyModel() {};
+	/*CTinyModel(CTinyModel& vModel)
+	{
+		m_Directory = vModel.m_Directory;
+		m_Materials = vModel.m_Materials;
+		m_TextureLoaded = vModel.m_TextureLoaded;
+		for (int i = 0; i < vModel.m_Meshes.size(); i++)
+		{
+			m_Meshes.push_back(CMesh(vModel.m_Meshes[i]));
+		}
+	}*/
 	void loadModel(std::string vPath)
 	{
 		m_Directory = vPath.substr(0, vPath.find_last_of('/'));
@@ -208,19 +215,8 @@ public:
 	{
 		return m_Box;
 	}
-	void isVertexIn()
-	{
-		int Count = 0;
-		for(int i =0;i<m_Meshes.size();i++)
-			for (int k = 0; k < m_Meshes[i].getVertices().size(); k++)
-			{
-				if (m_Meshes[i].fetchVertices()[k].isInBox(m_Box))
-					Count++;
-				else
-					std::cout << "not in " << std::endl;
-			}
-		std::cout << Count << std::endl;
-	}
+	
+	
 	
 private:
 	std::vector<CMesh> m_Meshes;
@@ -249,6 +245,9 @@ private:
 		for (int i = 0; i < vShapes.size(); i++)
 		{
 			__processMesh(vAttrib, vShapes[i]);
+		}
+		for (int i = 0; i < m_Meshes.size(); i++)
+		{
 			m_Meshes[i].setMeshID(i);			
 		}
 	}
