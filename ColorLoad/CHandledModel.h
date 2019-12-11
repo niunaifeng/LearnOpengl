@@ -13,7 +13,7 @@ public:
 			m_Vertices.insert(m_Vertices.end(), Mesh.getVertices().begin(), Mesh.getVertices().end());
 		}
 	}
-	std::vector<SVertex> getVertices()
+	const std::vector<SVertex>& getVertices()
 	{
 		return m_Vertices;
 	}

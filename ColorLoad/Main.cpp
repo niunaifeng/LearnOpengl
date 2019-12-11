@@ -72,12 +72,12 @@ int main()
 	Shader OurShaderC("./Shader/ModelCVertexShader.vert", "./Shader/ModelCFragmentShader.frag");
 	Shader OurShaderT("./Shader/ModelTVertexShader.vert", "./Shader/ModelTFragmentShader.frag");
 	//CTinyModel MyModel("./Model2/CornellBox-Empty-RG.obj");
-	//CTinyModel MyModel("./Model/nanosuit.obj");
-	//MyModel.changeTexToColor();	
+	CTinyModel MyModel("./Model/nanosuit.obj");
+	MyModel.changeTexToColor();	
 	//MyModel.showMesh();
 	//CBuildobj ReModel(MyModel);
 	//CTinyModel RebuiltModel("./Model2/Remeshed-CornellBox-Empty-RG-404.obj");
-	//CTinyModel RebuiltModel("./Model/nanosuit-1.96k.obj");
+	CTinyModel RebuiltModel("./Model/nanosuit-1.96k.obj");
 	//CTinyModel MyModel("./Model/rewrittenobj2.obj");
 	//CBuildobj ReObj(RebuiltModel);
 	//callMulitThread(&RebuiltModel, MyModel, 0, 500);
@@ -101,10 +101,49 @@ int main()
 	
 	//RebuiltModel.calColor();
 	//RebuiltModel.setMeshes();
-	SBox MyBox(10, 0, 12, 2, 20, 10);
-	std::vector<SVertex> Vertices;
-	COctree MyTree(Vertices, MyBox, 4);
-	MyTree.show();
+	CHandleModel HandleModel(MyModel);
+	SBox MyBox = MyModel.getBox();
+	//MyModel.isVertexIn();
+	std::vector<SVertex> Vertices = HandleModel.getVertices();
+	std::vector<SVertex*> MyVertices;
+	for (int i = 0; i < RebuiltModel.getMeshes().size(); i++)
+	{				
+		for(int k = 0;k< RebuiltModel.getMeshes()[i].getVertices().size();k++)
+		MyVertices.push_back(&RebuiltModel.getMeshes()[i].getVertices()[k]);
+	}
+	clock_t Start = clock();
+	COctree MyTree(Vertices, MyBox, 20, MyVertices);
+	clock_t End = clock();
+	
+	std::cout << "Build Octree use " << End - Start << std::endl;
+	//for (int i = 0; i < RebuiltModel.getMeshes()[0].getVertices().size(); i++)
+	Start = clock();
+	/*for (int i = 0; i < 30; i++)
+	{		
+		MyTree.doMatch(MyVertices[i]);
+		std::cout << "in main "<< MyVertices[i].NN.size()<<std::endl;
+		
+	}*/
+	for (int i = 0; i < MyVertices.size(); i++)
+	{
+		MyTree.doMatch(MyVertices[i]);
+	}
+	End = clock();
+	std::cout << "30 vertex use " << End - Start << std::endl;
+	
+	RebuiltModel.calColor();
+	RebuiltModel.setMeshes();
+	int Count = 0;
+	for (int i = 0; i < MyVertices.size(); i++)
+	{
+		if (!MyVertices[i]->isHandled)
+		{
+			Count++;
+			
+		}
+	}
+	std::cout << Count << " miss" << std::endl;
+	//MyTree.show();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -135,7 +174,7 @@ int main()
 		OurShaderC.setMat4("model", model);
 		//OurModel.drawInColor(OurShaderC);
 		//MyModel.drawInColor(OurShaderC);
-		//RebuiltModel.drawInColor(OurShaderC);
+		RebuiltModel.drawInColor(OurShaderC);
 		//OurShaderT.use();
 		OurShaderT.setMat4("projection", projection);
 		OurShaderT.setMat4("view", view);

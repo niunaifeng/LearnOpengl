@@ -38,14 +38,15 @@ struct SVertex
 	glm::vec3 NormColor;
 	glm::vec3 HeigColor;
 	std::vector<SVertex> NN;
+	bool isHandled = false;
 	int MeshID;
 	
 	float MinDistance = 100.0f;
 	SVertex() {};
 	bool isInBox(SBox vBox)
 	{
-		return (Position.x > vBox.MinX) && (Position.x < vBox.MaxX) && (Position.y > vBox.MinY) && (Position.y < vBox.MaxY)
-			&& (Position.z > vBox.MinZ) && (Position.z < vBox.MaxZ);
+		return (Position.x >= vBox.MinX) && (Position.x <= vBox.MaxX) && (Position.y >= vBox.MinY) && (Position.y <= vBox.MaxY)
+			&& (Position.z >= vBox.MinZ) && (Position.z <= vBox.MaxZ);
 	}
 	
 	float calDistance(SVertex vVertex)
@@ -66,6 +67,24 @@ struct SVertex
 			NN.clear();
 			NN.push_back(vVertex);
 		}
+	}
+	void findVertexInVector(std::vector<SVertex>& vVertices)
+	{
+		for (int i = 0; i < vVertices.size(); i++)
+		{
+			float Distance = calDistance(vVertices[i]);
+			if (abs(Distance - MinDistance) < 0.01f)
+			{
+				NN.push_back(vVertices[i]);
+			}
+			if (Distance < MinDistance)
+			{
+				MinDistance = Distance;
+				NN.clear();
+				NN.push_back(vVertices[i]);
+			}
+		}
+		isHandled = true;
 	}
 	void calColor()
 	{	
@@ -281,11 +300,11 @@ public:
 	{
 		vVertex.DiffColor = glm::vec3(0, 0, 0);
 	}
-	const std::vector<SVertex>& getVertices() const
+	std::vector<SVertex>& getVertices()
 	{
 		return m_Vertices;
 	}
-	std::vector<SVertex>& const fetchVertices() 
+	std::vector<SVertex>& fetchVertices() 
 	{
 		return m_Vertices;
 	}
@@ -359,6 +378,7 @@ public:
 		std::cout << "Y " << m_Box.MinY << "--" << m_Box.MaxY << std::endl;
 		std::cout << "Z " << m_Box.MinZ << "--" << m_Box.MaxZ << std::endl;
 	}
+	
 private:	
 	std::vector<SVertex> m_Vertices;
 	std::vector<unsigned int> m_Indices;
@@ -390,7 +410,14 @@ private:
 				MaxZ = m_Vertices[i].Position.z;
 			if (m_Vertices[i].Position.z < MinZ)
 				MinZ = m_Vertices[i].Position.z;
-		}		
+		}
+		m_Box.MaxX = MaxX;
+		m_Box.MinX = MinX;
+		m_Box.MaxY = MaxY;
+		m_Box.MinY = MinY;
+		m_Box.MaxZ = MaxZ;
+		m_Box.MinZ = MinZ;
+
 	}
 	
 	

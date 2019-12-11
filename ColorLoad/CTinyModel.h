@@ -6,7 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include<thread>
 #include"CMesh.h"
-
 class CTinyModel
 {
 public:	
@@ -94,7 +93,8 @@ public:
 	}
 	CTinyModel(std::string vPath)
 	{
-		loadModel(vPath);			
+		loadModel(vPath);
+		__setBox();			
 	}
 	CTinyModel() {};
 	void loadModel(std::string vPath)
@@ -185,7 +185,7 @@ public:
 			m_Meshes[i].setMesh();
 		}
 	}
-	const std::vector<CMesh>& getMeshes() const
+	std::vector<CMesh>& getMeshes()
 	{
 		return m_Meshes;
 	}
@@ -204,19 +204,22 @@ public:
 		for (unsigned int i = 0; i < m_Meshes.size(); i++)
 			m_Meshes[i].drawInTex(vShader);
 	}
-	std::vector<SVertex> processModel(CTinyModel vModel)
+	const SBox& getBox()
 	{
-		if (vModel.m_Meshes.size() > 1)
-		{
-			std::vector<SVertex> Vertices;
-			for (int i = 0; i < m_Meshes.size(); i++)
+		return m_Box;
+	}
+	void isVertexIn()
+	{
+		int Count = 0;
+		for(int i =0;i<m_Meshes.size();i++)
+			for (int k = 0; k < m_Meshes[i].getVertices().size(); k++)
 			{
-				Vertices.insert(Vertices.end(), m_Meshes[i].getVertices().begin(), m_Meshes[i].getVertices().end());
+				if (m_Meshes[i].fetchVertices()[k].isInBox(m_Box))
+					Count++;
+				else
+					std::cout << "not in " << std::endl;
 			}
-			return Vertices;
-		}
-		else
-			return m_Meshes[0].getVertices();
+		std::cout << Count << std::endl;
 	}
 	
 private:
@@ -376,7 +379,7 @@ private:
 		MaxY = m_Meshes[0].getBox().MaxY;
 		MinY = m_Meshes[0].getBox().MinY;
 		MaxZ = m_Meshes[0].getBox().MaxZ;
-		MinZ = m_Meshes[0].getBox().MinZ;
+		MinZ = m_Meshes[0].getBox().MinZ;		
 		for (int i = 1; i < m_Meshes.size(); i++)
 		{
 			if (MaxX < m_Meshes[i].getBox().MaxX)
@@ -390,7 +393,7 @@ private:
 			if (MaxZ < m_Meshes[i].getBox().MaxZ)
 				MaxZ = m_Meshes[i].getBox().MaxZ;
 			if (MinZ > m_Meshes[i].getBox().MinZ)
-				MinZ = m_Meshes[i].getBox().MinZ;
+				MinZ = m_Meshes[i].getBox().MinZ;							
 		}
 		m_Box.MaxX = MaxX * m_Box.MAGNIFICATION;
 		m_Box.MinX = MinX > 0 ? (MinX / m_Box.MAGNIFICATION) : (MinX * m_Box.MAGNIFICATION);
